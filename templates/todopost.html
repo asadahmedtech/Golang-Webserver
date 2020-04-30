@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Post a ToDo</div>
+                <div class="card-body">
+                    <div class="form-group">
+                            <label for="error" class="cols-sm-2 control-label">{{ .Error }}</label>
+                            <label for="success" class="cols-sm-2 control-label">{{ .Result }}</label>
+                        </div>
+                    <form class="form-horizontal" method="post" action="/todopost">
+                        <div class="form-group">
+                            <label for="task" class="cols-sm-2 control-label">What task to do?</label>
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                                    <input type="text" class="form-control" name="task" id="task" placeholder="Enter your task" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group ">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Post</button>
+                        </div>
+                        <div class="login-register">
+                            <a href="/todoview">View your ToDo list</a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
