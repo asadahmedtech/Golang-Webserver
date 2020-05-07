@@ -12,21 +12,21 @@ import (
 	db "project/database"
 )
 
-func Insert(todo models.ToDo)  (models.ResponseResult, error){
-	var res models.ResponseResult
+func Insert(todo models.ToDo)  (error){
+	// var res models.ResponseResult
 	// var result models.ToDo
 
 	collection, err := db.GetDBCollection("todo")
 	if err != nil {
-		return res, err
+		return err
 	}
 	
 	_, err = collection.InsertOne(context.TODO(), todo)
 	if err != nil {
-		return res, errors.New("Error While Inserting, Try Again")
+		return errors.New("Error While Inserting, Try Again")
 	}
-	res.Result = "200"
-	return res, nil
+	// res.Result = "200"
+	return nil
 }
 
 func Fetch(username string) ([]models.ToDo, error){

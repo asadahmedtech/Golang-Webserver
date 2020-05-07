@@ -10,11 +10,13 @@ import(
 	"project/auth"
 	tododb "project/todo"
 	"time"
+
+	// "errors"
 	)
 
 func TodoInsertHandler(w http.ResponseWriter, r *http.Request) {
 	var todo models.ToDo
-	var res models.ResponseResult
+	// var res models.ResponseResult
 
 	w.Header().Set("Content-Type", "application/json")
 	body, _ := ioutil.ReadAll(r.Body)
@@ -25,27 +27,27 @@ func TodoInsertHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(todo)
 	if err != nil {
-		res.Error = err.Error()
-		json.NewEncoder(w).Encode(res)
+		auth.ReturnJSONResp(w, err.Error(), 400)
 		return
 	}
 
-	res, err = tododb.Insert(todo)
+	err = tododb.Insert(todo)
 
 	if err != nil {
-		auth.ReturnErrorJSON(w, err)
+		auth.ReturnJSONResp(w, err.Error(), 400)
 		return
 	}
-	json.NewEncoder(w).Encode(res)
+	auth.ReturnJSONResp(w, "Todo Inserted", 200)
 	return
 }
 
 func TodoFetchHandler(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(0).(string)
 	res, err := tododb.Fetch(user)
+	w.Header().Set("Content-Type", "application/json")
 
 	if err != nil {
-		auth.ReturnErrorJSON(w, err)
+		auth.ReturnJSONResp(w, err.Error(), 400)
 		return
 	}
 	json.NewEncoder(w).Encode(res)
@@ -54,7 +56,7 @@ func TodoFetchHandler(w http.ResponseWriter, r *http.Request) {
 
 func TodoInsertHandlerStatic(w http.ResponseWriter, r *http.Request) {
 	var todo models.ToDo
-	var res models.ResponseResult
+	// var res models.ResponseResult
 
 	w.Header().Set("Content-Type", "application/json")
 	body, _ := ioutil.ReadAll(r.Body)
@@ -65,20 +67,19 @@ func TodoInsertHandlerStatic(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(todo)
 	if err != nil {
-		res.Error = err.Error()
-		json.NewEncoder(w).Encode(res)
+		auth.ReturnJSONResp(w, err.Error(), 400)
 		return
 	}
 
 
-	res.Result = "Success"
+	// res.Result = "Success"
 	err = nil
 
 	if err != nil {
-		auth.ReturnErrorJSON(w, err)
+		auth.ReturnJSONResp(w, err.Error(), 400)
 		return
 	}
-	json.NewEncoder(w).Encode(res)
+	auth.ReturnJSONResp(w, "Todo Inserted", 200)
 	return
 }
 
@@ -90,7 +91,7 @@ func TodoFetchHandlerStatic(w http.ResponseWriter, r *http.Request) {
 	// err er
 
 	// if err != nil {
-	// 	auth.ReturnErrorJSON(w, err)
+	// 	auth.ReturnJSONResp(w, err.Error(), 400)
 	// 	return
 	// }
 	json.NewEncoder(w).Encode(res)

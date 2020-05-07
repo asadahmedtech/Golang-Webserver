@@ -13,7 +13,7 @@ type User struct {
 }
 
 type ResponseResult struct {
-	Error  string `json:"error"`
+	Status  int `json:"status"`
 	Result string `json:"result"`
 }
 

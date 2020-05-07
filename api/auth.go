@@ -9,13 +9,13 @@ import (
 
 	"project/models"
 	"project/auth"
-
+	// "errors"
 	// "time"
 )
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.User
-	var res models.ResponseResult
+	// var res models.ResponseResult
 
 	w.Header().Set("Content-Type", "application/json")
 	body, _ := ioutil.ReadAll(r.Body)
@@ -23,18 +23,17 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(user)
 	if err != nil {
-		res.Error = err.Error()
-		json.NewEncoder(w).Encode(res)
+		auth.ReturnJSONResp(w, err.Error(), 400)
 		return
 	}
 
-	res, err = auth.Register(user)
-
+	err = auth.Register(user)
 	if err != nil {
-		auth.ReturnErrorJSON(w, err)
+		auth.ReturnJSONResp(w, err.Error(), 400)
 		return
 	}
-	json.NewEncoder(w).Encode(res)
+
+	auth.ReturnJSONResp(w, "Registeration Successful", 200)
 	return
 }
 
@@ -51,7 +50,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	result, err := auth.Login(user.Username, user.Password)
 
 	if err != nil {
-		auth.ReturnErrorJSON(w, err)
+		auth.ReturnJSONResp(w, err.Error(), 400)
 		return
 	}
 	
@@ -83,7 +82,7 @@ func LoginHandlerStatic(w http.ResponseWriter, r *http.Request) {
 	result, err := auth.LoginStatic(user.Username, user.Password)
 
 	if err != nil {
-		auth.ReturnErrorJSON(w, err)
+		auth.ReturnJSONResp(w, err.Error(), 400)
 		return
 	}
 	

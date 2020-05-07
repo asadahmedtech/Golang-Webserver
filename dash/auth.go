@@ -38,15 +38,15 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	user.LastName = r.FormValue("lastname")
 	user.Password = r.FormValue("password")
 
-	res, err := auth.Register(user)
+	err := auth.Register(user)
 
 	t, _  := template.ParseFiles("templates/register.html")
 	if err != nil {
-		res.Error = err.Error()
+		res.Result = err.Error()
 		t.Execute(w, res)
 		return
 	}
-
+	res.Result = "Registration Successful"
 	t.Execute(w, res)
 	return
 }
@@ -69,7 +69,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(username, password, result, err)
 	if err != nil {
 		t, _  := template.ParseFiles("templates/login.html")
-		res.Error = err.Error()
+		res.Result = err.Error()
 		t.Execute(w, res)
 		return
 	}

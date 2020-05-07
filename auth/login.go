@@ -21,13 +21,13 @@ var mainuser = models.User{
 	LastName: "ahmed",
 }
 
-func Register(user models.User)  (models.ResponseResult, error){
-	var res models.ResponseResult
+func Register(user models.User)  (error){
+	// var res models.ResponseResult
 	var result models.User
 
 	collection, err := db.GetDBCollection("users")
 	if err != nil {
-		return res, err
+		return err
 	}
 	
 	err = collection.FindOne(context.TODO(), bson.D{{"username", user.Username}}).Decode(&result)
@@ -35,22 +35,22 @@ func Register(user models.User)  (models.ResponseResult, error){
 		if err.Error() == "mongo: no documents in result" {
 			hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 5)
 			if err != nil {
-				return res, errors.New("Error While Hashing Password, Try Again")
+				return errors.New("Error While Hashing Password, Try Again")
 			}
 			user.Password = string(hash)
 
 			_, err = collection.InsertOne(context.TODO(), user)
 			if err != nil {
-				return res, errors.New("Error While Creating User, Try Again")
+				return errors.New("Error While Creating User, Try Again")
 			}
-			res.Result = "Registration Successful"
-			return res, nil
+			// res.Result = "Registration Successful"
+			return nil
 		}
-		return res, err
+		return err
 	}
 
 	// res.Result = "Username already Exists"
-	return res, errors.New("Username already Exists")
+	return errors.New("Username already Exists")
 }
 
 func Login(username, password string) (models.User, error){

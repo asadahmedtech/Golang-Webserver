@@ -10,25 +10,34 @@ import(
 	"project/models"
 	// "project/auth"
 	tododb "project/todo"
+	"strings"
 	"time"
 	)
 
 func TodoInsertHandler(w http.ResponseWriter, r *http.Request) {
 	var todo models.ToDo
 	var res models.ResponseResult
+	t, _  := template.ParseFiles("templates/todopost.html")
 
 	r.ParseForm()
-	todo.Task = r.FormValue("task")
-
+	task := r.FormValue("task")
+	task = strings.TrimSpace(task)
+	if task==""{
+		res.Status = 400
+		res.Result = "Enter something"
+		t.Execute(w, res)
+		return
+	}
+	todo.Task = task
 	todo.Username = r.Context().Value(0).(string)
 	todo.CreatedAt = time.Now()
 
 	fmt.Println(todo)
-	res, err := tododb.Insert(todo)
-
-	t, _  := template.ParseFiles("templates/todopost.html")
+	err := tododb.Insert(todo)
+	
 	if err != nil {
-		res.Error = err.Error()
+		res.Status = 400
+		res.Result = err.Error()
 		t.Execute(w, res)
 		return
 	}

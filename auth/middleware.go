@@ -96,11 +96,12 @@ func CookieMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	    next(w, rWithUser)
 	}
 }
-func ReturnErrorJSON(w http.ResponseWriter, err error){
+func ReturnJSONResp(w http.ResponseWriter, resp string, status int){
 	var res models.ResponseResult
 
 	w.Header().Set("Content-Type", "application/json")
-	res.Error = err.Error()
+	res.Status = status
+	res.Result = resp
 	json.NewEncoder(w).Encode(res)
 	return
 }

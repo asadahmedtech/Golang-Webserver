@@ -14,7 +14,7 @@
                 <div class="card-header">Post a ToDo</div>
                 <div class="card-body">
                     <div class="form-group">
-                            <label for="error" class="cols-sm-2 control-label">{{ .Error }}</label>
+                           <!--  <label for="error" class="cols-sm-2 control-label">{{ .Status }}</label> -->
                             <label for="success" class="cols-sm-2 control-label">{{ .Result }}</label>
                         </div>
                     <form class="form-horizontal" method="post" action="/todopost">
@@ -23,7 +23,7 @@
                             <div class="cols-sm-10">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                                    <input type="text" class="form-control" name="task" id="task" placeholder="Enter your task" />
+                                    <input type="text" class="form-control" name="task" id="task" placeholder="Enter your task" required="true" />
                                 </div>
                             </div>
                         </div>
