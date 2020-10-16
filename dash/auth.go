@@ -4,27 +4,26 @@ import (
 	// "encoding/json"
 	"fmt"
 	"io/ioutil"
+
 	// "log"
-	"net/http"
-	"time"
 	"html/template"
-	"project/models"
+	"net/http"
 	"project/auth"
-
+	"project/models"
+	"time"
 	// jwt "github.com/dgrijalva/jwt-go"
-
 )
 
 func LoadFile(fileName string) (string, error) {
-    bytes, err := ioutil.ReadFile(fileName)
-    if err != nil {
-        return "", err
-    }
-    return string(bytes), nil
+	bytes, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
 }
 
 func RegisterPageHandler(w http.ResponseWriter, r *http.Request) {
-	t, _  := LoadFile("templates/register.html")
+	t, _ := LoadFile("templates/register.html")
 	fmt.Fprintf(w, t)
 }
 
@@ -40,7 +39,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := auth.Register(user)
 
-	t, _  := template.ParseFiles("templates/register.html")
+	t, _ := template.ParseFiles("templates/register.html")
 	if err != nil {
 		res.Result = err.Error()
 		t.Execute(w, res)
@@ -52,7 +51,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginPageHandler(w http.ResponseWriter, r *http.Request) {
-	t, _  := LoadFile("templates/login.html")
+	t, _ := LoadFile("templates/login.html")
 	fmt.Fprintf(w, t)
 }
 
@@ -68,7 +67,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(username, password, result, err)
 	if err != nil {
-		t, _  := template.ParseFiles("templates/login.html")
+		t, _ := template.ParseFiles("templates/login.html")
 		res.Result = err.Error()
 		t.Execute(w, res)
 		return
@@ -78,15 +77,15 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	expiration := time.Now().Add(365 * 24 * time.Hour)
 
 	http.SetCookie(w, &http.Cookie{
-				Name:    "token",
-				Value:   tokenString,
-				Expires: expiration,
+		Name:    "token",
+		Value:   tokenString,
+		Expires: expiration,
 	})
 	fmt.Println(tokenString)
 	c, err := r.Cookie("token")
 	fmt.Println(c, err)
 
-	http.Redirect(w, r, "/profile", 307) 
+	http.Redirect(w, r, "/profile", 307)
 	return
 }
 
@@ -94,12 +93,12 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 
 	expiration := time.Now().Add(365 * 24 * time.Hour)
 	http.SetCookie(w, &http.Cookie{
-				Name:    "token",
-				Value:   "",
-				Expires: expiration,
+		Name:    "token",
+		Value:   "",
+		Expires: expiration,
 	})
 
-	http.Redirect(w, r, "/login", 307) 
+	http.Redirect(w, r, "/login", 307)
 	return
 }
 func ProfileHandler(w http.ResponseWriter, r *http.Request) {
@@ -111,7 +110,7 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	// 		w.WriteHeader(http.StatusUnauthorized)
 	// 		return
 	// 	}
-	// 	// For any other type of error, return a bad request status
+	// 	// For any other type of error, return a 400 status
 	// 	w.WriteHeader(http.StatusBadRequest)
 	// 	return
 	// }
@@ -143,11 +142,10 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	// }
 	// user := claims.Username
 
-
 	user := r.Context().Value(0).(string)
 	result := auth.Profile(user)
 
-	t, _  := template.ParseFiles("templates/profile.html")
+	t, _ := template.ParseFiles("templates/profile.html")
 	t.Execute(w, result)
 
 }
